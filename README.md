@@ -103,9 +103,13 @@ The CytoCommunity algorithm for TCN indentification can be used in either an uns
 
 ### Unsupervised CytoCommunity
 
-The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including cell type label and cell spatial coordinate files for each sample/image, as well as an image name list file. These files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
+#### Prepare input data
 
-Run the following steps in Windows Powershell or Linux Bash shell:
+The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including three types of files: (1) cell type label and (2) cell spatial coordinate files for each sample/image, as well as (3) an image name list file. These example input files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
+
+Note that the naming fashion of the three types of files cannot be changed when using your own data. These files should be named as "[image name]_CellTypeLabel.txt", "[image name]_Coordinates.txt" and "ImageNameList.txt". Here, [image_name] should be consistent with your customized image names listed in the "ImageNameList.txt". The "[image name]_CellTypeLabel.txt" and "[image name]_Coordinates.txt" list cell type names and cell coordinates (tab-delimited x/y) of all cells in an image, respectively. The cell orders should be exactly the same across the two files.
+
+#### Run the following steps in Windows Powershell or Linux Bash shell:
 
 #### 1. Use Step1 to construct KNN-based cellular spatial graghs and convert the input data to the standard format required by Torch.
 
@@ -132,10 +136,10 @@ python Step2_TCNLearning_Unsupervised.py
 - Image_Name: The name of the sample/image on which you want to identify TCNs.
 - Num_TCN: The maximum number of TCNs you expect to identify.
 - Num_Run: How many times to run the soft TCN assignment learning module in order to obtain robust results. [Default=20]
-- Num_Epoch: The number of training epochs. This value can be smaller than the default value (3000) for the large image (e.g., more than 10,000 cells).
+- Num_Epoch: The number of training epochs. This value can be smaller than the default value [3000] for the large image (e.g., more than 10,000 cells).
 - Embedding_Dimension: The dimension of the embedding features for each cell. [Default=128]
 - Learning_Rate: This parameter determines the step size at each iteration while moving toward a minimum of a loss function. [Default=1E-4]
-- Loss_Cutoff: An empirical cutoff of the final loss to avoid underfitting. This value can be larger than the default value (-0.6) for the large image (e.g., more than 10,000 cells).
+- Loss_Cutoff: An empirical cutoff of the final loss to avoid underfitting. This value can be larger than the default value [-0.6] for the large image (e.g., more than 10,000 cells).
 
 #### 3. Use Step3 to perform TCN assignment ensemble.
 
@@ -157,8 +161,6 @@ python Step4_ResultVisualization.py
 &ensp;&ensp;**Hyperparameters**
 - InputFolderName: The folder name of your input dataset, consistent with Step1.
 - Image_Name: The name of the sample/image on which you want to identify TCNs, consistent with Step2.
-
-Averagely, the running time for a sample/image in the example dataset should take around 12 minutes.
 
 
 ## Maintainers
