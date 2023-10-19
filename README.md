@@ -40,9 +40,9 @@ Python version: 3.10.6
 
 R version: >= 4.0 suggested
 
-Clone this repository (v1.0.0) and cd into it as below, or directly download this CytoCommunity version at https://github.com/huBioinfo/CytoCommunity/releases/tag/v1.0.0
+Clone this repository (Beta_v1.1.0) and cd into it as below.
 ```
-git clone https://github.com/huBioinfo/CytoCommunity.git
+git clone https://github.com/huBioinfo/CytoCommunity-Beta_v1.1.0.git
 cd CytoCommunity
 ```
 ### For Windows
@@ -96,21 +96,7 @@ The whole installation should take less than 20 minutes.
     
 ## Usage
 
-The CytoCommunity algorithm for TCN indentification can be used in either an unsupervised or a supervised learning mode. It consists of two components: a soft TCN assignment learning module and a TCN ensemble module to determine the final robust TCNs.
-
-You can apply CytoCommunity algorithm in the following five steps:
-
- - Step0: Constructing KNN graghs.
-
- - Step1: Importing data.
-
- - Step2: Performing soft TCN asssignment for cells through supervised or unsupervised learning.
-
- - Step3: Conducting TCN ensemble for more robust result.
-
- - Step4: Visualization of the final TCN map.
-
-You can see [Documentation and Tutorials](https://cytocommunity.readthedocs.io/en/latest/index.html) to get easier start and also reproduce TCN partitions shown in the paper using the commands below. The associated code scripts and example input data can be found in the folder "Tutorial".
+The CytoCommunity algorithm for TCN indentification can be used in either an unsupervised or a supervised learning mode. You can reproduce TCN partitions shown in the paper [1] using the commands below. The associated code scripts and example input data can be found under the directory "Tutorial/".
 
 ### Unsupervised CytoCommunity
 
@@ -118,7 +104,9 @@ The example input data to the unsupervised learning mode of CytoCommunity is der
 
 Run the following steps in Windows Powershell or Linux Bash shell:
 
-#### 1. Use Step1 to construct KNN-based cellular spatial graghs and convert the input data to the standard format of torch.
+#### 1. Use Step1 to construct KNN-based cellular spatial graghs and convert the input data to the standard format required by Torch.
+
+This step generates a folder "Step1_Output" including constructed cellular spatial graphs of all samples/images in your input dataset folder (e.g., /MERFISH-Brain_Input/). No need to re-run this step for different images.
 
 ```bash
 conda activate CytoCommunity
@@ -128,7 +116,7 @@ python Step1_ConstructCellularSpatialGraphs.py
 
 #### 2. Use Step2 to perform soft TCN assignment learning in an unsupervised fashion.
 
-This step generates a folder "Step2_Output" including multiple runs (subfolders) of soft TCN assignment learning module. Each subfolder contains a cluster adjacent matrix, a cluster assignment matrix, a node mask file and a loss recording file.
+This step generates a folder "Step2_Output_[specified image name]" including multiple runs (subfolders) of soft TCN assignment learning module. Each subfolder contains a cluster adjacent matrix, a cluster assignment matrix, a node mask file and a loss recording file. You need to re-run this step for different images by changing the hyperparameter "Image_Name".
 
 ```bash
 python Step2_TCNLearning_Unsupervised.py
@@ -136,7 +124,7 @@ python Step2_TCNLearning_Unsupervised.py
 
 #### 3. Use Step3 to perform TCN assignment ensemble.
 
-The result of this step will be saved in the "Step3_Output/TCNLabel_MajorityVoting.csv" file. Make sure that the diceR package has been installed before Step3.
+The result of this step is saved in the "Step3_Output_[specified image name]/TCNLabel_MajorityVoting.csv" file. Make sure that the diceR package has been installed before Step3. You need to re-run this step for different images by changing the hyperparameter "Image_Name".
 
 ```bash
 Rscript Step3_TCNEnsemble.R
@@ -144,7 +132,7 @@ Rscript Step3_TCNEnsemble.R
 
 #### 4. Use Step4 to visualize single-cell spatial maps colored based on cell type annotations and final TCN partitions.
 
-After this step, we will obtain two single-cell saptial maps (in PNG and PDF formats) colored by input cell type annotations and identified TCNs, respectively.
+This step generates a folder "Step4_Output_[specified image name]" including two single-cell saptial maps (in PNG and PDF formats) colored by input cell type annotations and identified TCNs, respectively, 
 
 ```bash
 python Step4_ResultVisualization.py
@@ -155,7 +143,7 @@ The running time for a sample/image in this dataset should take around 12 minute
 
 ## Maintainers
 
-Yafei Xu(22031212416@stu.xidian.edu.cn)
+Yafei Xu (22031212416@stu.xidian.edu.cn)
 
 Yuxuan Hu (huyuxuan@xidian.edu.cn)
 
