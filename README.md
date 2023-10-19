@@ -114,99 +114,44 @@ You can see [Documentation and Tutorials](https://cytocommunity.readthedocs.io/e
 
 ### Unsupervised CytoCommunity
 
-The example input data to the unsupervised learning mode of CytoCommunity is a KNN graph based on mouse brain MERFISH data, including cell type labels, cell spatial coordinates, edge index, gragh index and node attributes files and an image name list. These files can be found in the folder "MERFISH_Brain_KNNgraph_Input".
+The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including cell type label, cell spatial coordinate files and an image name list. These files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
 
 Run the following steps in Windows Powershell or Linux Bash shell:
 
-#### 0. Use Step0 to construct KNN graghs and prepare data for the subsequent steps.
+#### 1. Use Step1 to construct KNN-based cellular spatial graghs and convert the input data to the standard format of torch.
 
 ```bash
 conda activate CytoCommunity
-cd Tutorial/Unsupervised_MERFISH
-python Step0_Construct_KNNgraph.py
+cd Tutorial/Unsupervised
+python Step1_ConstructCellularSpatialGraphs.py
 ```
 
-#### 1. Use Step1 to perform data preprocessing to convert the input data to the standard format of torch.
-
-This step produces two file folders, "processed" and "raw", with the former containing three .pt files, named as pre_filter, pre_transform and SpatialOmicsImageDataset, and the latter being an empty folder at this point. 
-
-```bash
-python Step1_DataImport.py
-```
-    
 #### 2. Use Step2 to perform soft TCN assignment learning in an unsupervised fashion.
 
-This step generates a folder for each run that contains a cluster adjacent matrix, a cluster assignment matrix, a node mask, a gragh index file and a loss recording file.
+This step generates a folder "Step2_Output" including multiple runs (subfolders) of soft TCN assignment learning module. Each subfolder contains a cluster adjacent matrix, a cluster assignment matrix, a node mask file and a loss recording file.
 
 ```bash
-python Step2_SoftTCNLearning_Unsupervised.py
+python Step2_TCNLearning_Unsupervised.py
 ```
 
 #### 3. Use Step3 to perform TCN assignment ensemble.
 
-The result of this step will be saved in the "ConsensusLabel_MajorityVoting.csv" file. Make sure that the diceR package has been installed before Step3.
+The result of this step will be saved in the "Step3_Output/TCNLabel_MajorityVoting.csv" file. Make sure that the diceR package has been installed before Step3.
 
 ```bash
-Rscript Step3_TCN_Ensemble.R
+Rscript Step3_TCNEnsemble.R
 ```
 
-#### 4. Use Step4 to visualize final TCN partitions.
+#### 4. Use Step4 to visualize single-cell spatial maps colored based on cell type annotations and final TCN partitions.
 
-After this step, we will obtain a single-cell saptial map colored by identified TCNs.
+After this step, we will obtain two single-cell saptial maps (in PNG and PDF formats) colored by input cell type annotations and identified TCNs, respectively.
 
 ```bash
-python Step4_Visualization.py
+python Step4_ResultVisualization.py
 ```
-The running time for a sample in this dataset should take around 12 minutes.
+The running time for a sample/image in this dataset should take around 12 minutes.
 
-### Supervised CytoCommunity
 
-We can also run CytoCommunity in a supervised learning task. Given a dataset of multiple spatial omics images from different conditions, TCNs can be first identified for each image and then aligned across images for identifying condition-specific TCNs. However, TCN alignment is analogous to community alignment in graphs, which is NP-hard. To tackle this problem, we take advantage of graph pooling to generate an embedding representation of the whole graph that preserves the TCN partition information. By adapting the unsupervised graph partitioning model to a graph convolution and pooling-based graph classification framework, TCNs in different images are automatically aligned during soft TCN assignment learning, facilitating the identification of condition-specific TCNs.
-
-The example input data of this part is a KNN graph constructed based on triple-negative breast cancer MIBI-TOF data, including a image name list and cell type label, cell spatial coordinate, edge index, gragh index, gragh label and node attribute files, all of which are stored in the folder "MIBI_TNBC_KNNgraph_Input".
-
-Run the following steps in Windows Powershell or Linux Bash shell:
-
-#### 0. Use step0 to construct KNN graghs and prepare data for the subsequent steps.
-
-```bash
-conda activate CytoCommunity
-cd Tutorial/Supervised_MIBI_TNBC
-python Step0_Construct_KNNgraph.py 
-```
-
-#### 1. Use Step1 to perform data preprocessing to convert the input data to the standard format of torch.
-
-This step produces two file folders, "processed" and "raw", with the former containing three .pt files, named as pre_filter, pre_transform and SpatialOmicsImageDataset, and the latter being an empty folder at this point. 
-
-```bash
-python Step1_DataImport.py
-```
-
-#### 2. Use Step2 to perform soft TCN assignment learning in a supervised fashion.
-
-For each fold in each round of the training process, this step generates a folder that contains cluster adjacent matrix, cluster assignment matrix, gragh index, and node mask files and a training loss file.
-
-```bash
-python Step2_SoftTCNLearning_Supervised.py
-```
-
-#### 3. Use Step3 to perform TCN assignment ensemble.
-
-For each image, Step3 generates the following files: cluster assign matrix, node mask, gragh index and consensus label files of each fold in each run of the training process. Note the diceR package should be installed before this step. 
-
-```bash
-Rscript Step3_TCN_Ensemble.R
-```
-
-#### 4. Use Step4 to visualize final TCN partitions.
-
-After this step, we will obtain single-cell spatial maps colored by identified TCNs associated with image conditions/labels.
-
-```bash
-python Step4_Visualization.py
-```
-The running time of 10-fold cross validation for this dataset should take around 53 minutes.
 
 ## Maintainers
 
