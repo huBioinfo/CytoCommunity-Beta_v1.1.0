@@ -153,7 +153,7 @@ Rscript Step3_TCNEnsemble.R
 
 #### 4. Use Step4 to visualize single-cell spatial maps colored based on cell type annotations and final TCN partitions.
 
-This step generates a folder "Step4_Output_[specified image name]" including two single-cell saptial maps (in PNG and PDF formats) colored by input cell type annotations and identified TCNs, respectively, 
+This step generates a folder "Step4_Output_[specified image name]" including two single-cell saptial maps (in PNG and PDF formats) colored by input cell type annotations and identified TCNs, respectively. You need to re-run this step for different images by changing the hyperparameter "Image_Name".
 
 ```bash
 python Step4_ResultVisualization.py
