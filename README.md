@@ -105,9 +105,9 @@ The CytoCommunity algorithm for TCN indentification can be used in either an uns
 
 #### Prepare input data
 
-The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including three types of files: (1) cell type label and (2) cell spatial coordinate files for each sample/image, as well as (3) an image name list file. These example input files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
+The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including **three types of files: (1) cell type label and (2) cell spatial coordinate files for each sample/image, as well as (3) an image name list file**. These example input files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
 
-Note that the naming fashion of the three types of files cannot be changed when using your own data. These files should be named as "[image name]_CellTypeLabel.txt", "[image name]_Coordinates.txt" and "ImageNameList.txt". Here, [image_name] should be consistent with your customized image names listed in the "ImageNameList.txt". The "[image name]_CellTypeLabel.txt" and "[image name]_Coordinates.txt" list cell type names and cell coordinates (tab-delimited x/y) of all cells in an image, respectively. The cell orders should be exactly the same across the two files.
+Note that the naming fashion of the three types of files cannot be changed when using your own data. These files should be named as **"[image name]_CellTypeLabel.txt", "[image name]_Coordinates.txt" and "ImageNameList.txt"**. Here, [image_name] should be consistent with your customized image names listed in the "ImageNameList.txt". The "[image name]_CellTypeLabel.txt" and "[image name]_Coordinates.txt" list cell type names and cell coordinates (tab-delimited x/y) of all cells in an image, respectively. The cell orders should be exactly the same across the two files.
 
 #### Run the following steps in Windows Powershell or Linux Bash shell:
 
