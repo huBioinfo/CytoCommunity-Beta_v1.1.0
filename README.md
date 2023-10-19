@@ -12,6 +12,7 @@
 - [Maintainers](#maintainers)
 - [Citation](#citation)
 
+
 ## Overview
 
 <div align=center><img src="https://github.com/huBioinfo/CytoCommunity/blob/main/support/overview.png" width="650" height="650" alt="pipline"/></div>  
@@ -21,6 +22,7 @@ It remains poorly understood how different cell phenotypes organize and coordina
 We developed the CytoCommunity algorithm for identifying TCNs that can be applied in either an unsupervised or a supervised learning framework. The direct usage of cell phenotypes as initial features to learn TCNs makes it applicable to both single-cell transcriptomics and proteomics data, with the interpretation of TCN functions facilitated as well. Additionally, CytoCommunity can not only infer TCNs for individual images but also identify condition-specific TCNs for a set of images by leveraging graph pooling and image labels, which effectively addresses the challenge of TCN alignment across images.
 
 CytoCommunity is the first computational tool for end-to-end unsupervised and supervised analyses of single-cell spatial maps and enables direct discovery of conditional-specific cell-cell communication patterns across variable spatial scales.
+
 
 ## Installation
 
@@ -45,7 +47,7 @@ Clone this repository (Beta_v1.1.0) and cd into it as below.
 git clone https://github.com/huBioinfo/CytoCommunity-Beta_v1.1.0.git
 cd CytoCommunity
 ```
-### For Windows
+#### For Windows
 
 #### Preparing the virtual environment
 
@@ -73,7 +75,7 @@ conda install --yes --file requirements.txt
     > install.packages("diceR")
     ```
 
-### For Linux
+#### For Linux
 
 #### Preparing the virtual environment 
 
@@ -93,14 +95,15 @@ conda install --yes --file requirements.txt
     ```
 
 The whole installation should take less than 20 minutes.
-    
+
+
 ## Usage
 
 The CytoCommunity algorithm for TCN indentification can be used in either an unsupervised or a supervised learning mode. You can reproduce TCN partitions shown in the paper [1] using the commands below. The associated code scripts and example input data can be found under the directory "Tutorial/".
 
 ### Unsupervised CytoCommunity
 
-The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including cell type label, cell spatial coordinate files and an image name list. These files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
+The example input data to the unsupervised learning mode of CytoCommunity is derived from a mouse brain MERFISH dataset generated in [2], including cell type label and cell spatial coordinate files for each sample/image, as well as an image name list file. These files can be found under the directory "Tutorial/Unsupervised/MERFISH-Brain_Input/".
 
 Run the following steps in Windows Powershell or Linux Bash shell:
 
@@ -113,6 +116,9 @@ conda activate CytoCommunity
 cd Tutorial/Unsupervised
 python Step1_ConstructCellularSpatialGraphs.py
 ```
+&ensp;&ensp;**Hyperparameters**
+- InputFolderName: The folder name of your input dataset.
+- KNN_K: The K value used in the construction of the K nearest neighbor graph (cellular spatial graph) for each sample/image. This value can be empirically set to the integer closest to the square root of the average number of cells in the images in your dataset.
 
 #### 2. Use Step2 to perform soft TCN assignment learning in an unsupervised fashion.
 
@@ -121,6 +127,15 @@ This step generates a folder "Step2_Output_[specified image name]" including mul
 ```bash
 python Step2_TCNLearning_Unsupervised.py
 ```
+&ensp;&ensp;**Hyperparameters**
+- InputFolderName: The folder name of your input dataset, consistent with Step1.
+- Image_Name: The name of the sample/image on which you want to identify TCNs.
+- Num_TCN: The maximum number of TCNs you expect to identify.
+- Num_Run: How many times to run the soft TCN assignment learning module in order to obtain robust results. [Default=20]
+- Num_Epoch: The number of training epochs. This value can be smaller than the default value (3000) for the large image (e.g., more than 10,000 cells).
+- Embedding_Dimension: The dimension of the embedding features for each cell. [Default=128]
+- Learning_Rate: This parameter determines the step size at each iteration while moving toward a minimum of a loss function. [Default=1E-4]
+- Loss_Cutoff: An empirical cutoff of the final loss to avoid underfitting. This value can be larger than the default value (-0.6) for the large image (e.g., more than 10,000 cells).
 
 #### 3. Use Step3 to perform TCN assignment ensemble.
 
@@ -129,6 +144,8 @@ The result of this step is saved in the "Step3_Output_[specified image name]/TCN
 ```bash
 Rscript Step3_TCNEnsemble.R
 ```
+&ensp;&ensp;**Hyperparameters**
+- Image_Name: The name of the sample/image on which you want to identify TCNs, consistent with Step2.
 
 #### 4. Use Step4 to visualize single-cell spatial maps colored based on cell type annotations and final TCN partitions.
 
@@ -137,8 +154,11 @@ This step generates a folder "Step4_Output_[specified image name]" including two
 ```bash
 python Step4_ResultVisualization.py
 ```
-The running time for a sample/image in this dataset should take around 12 minutes.
+&ensp;&ensp;**Hyperparameters**
+- InputFolderName: The folder name of your input dataset, consistent with Step1.
+- Image_Name: The name of the sample/image on which you want to identify TCNs, consistent with Step2.
 
+Averagely, the running time for a sample/image in the example dataset should take around 12 minutes.
 
 
 ## Maintainers
@@ -149,10 +169,12 @@ Yuxuan Hu (huyuxuan@xidian.edu.cn)
 
 Kai Tan (tank1@chop.edu)
 
+
 ## Citation
 
-* Hu Y, Rong J, Xie R, Xu Y, Peng J, Gao L, Tan K. Learning predictive models of tissue cellular neighborhoods from cell phenotypes with graph pooling. *bioRxiv*, 2022.
- 
+[1] Hu Y, Rong J, Xie R, Xu Y, Peng J, Gao L, Tan K. Learning predictive models of tissue cellular neighborhoods from cell phenotypes with graph pooling. *bioRxiv*, 2022.
     https://www.biorxiv.org/content/10.1101/2022.11.06.515344v1
+    
+[2] Moffitt J R, Bambah-Mukku D, Eichhorn S W, et al. Molecular, spatial, and functional single-cell profiling of the hypothalamic preoptic region[J]. Science, 2018, 362(6416): eaau5324.
 
 
